@@ -1,0 +1,71 @@
+@model Secure_Academic_Management.ViewModels.SinhVienEditViewModel
+
+@{
+    ViewData["Title"] = "Cập nhật thông tin sinh viên";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+            
+            <!-- Hidden field để lưu MaSinhVien (không cho phép sửa) -->
+            <input type="hidden" asp-for="MaSinhVien" />
+
+            <div class="form-group mb-3">
+                <label asp-for="HoTen" class="control-label fw-bold"></label>
+                <input asp-for="HoTen" class="form-control" />
+                <span asp-validation-for="HoTen" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="Email" class="control-label fw-bold"></label>
+                <input asp-for="Email" class="form-control" />
+                <span asp-validation-for="Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="SoDienThoai" class="control-label fw-bold"></label>
+                <input asp-for="SoDienThoai" class="form-control" />
+                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="NgaySinh" class="control-label fw-bold"></label>
+                <input asp-for="NgaySinh" class="form-control" type="date" />
+                <span asp-validation-for="NgaySinh" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mb-3">
+                <label asp-for="TrangThai" class="control-label fw-bold"></label>
+                <select asp-for="TrangThai" class="form-control">
+                    <option value="Đang học">Đang học</option>
+                    <option value="Bảo lưu">Bảo lưu</option>
+                    <option value="Tạm ngừng">Tạm ngừng</option>
+                    <option value="Đã tốt nghiệp">Đã tốt nghiệp</option>
+                    <option value="Đã thôi học">Đã thôi học</option>
+                </select>
+                <span asp-validation-for="TrangThai" class="text-danger"></span>
+            </div>
+
+            <div class="form-group mt-4">
+                <input type="submit" value="Lưu thay đổi" class="btn btn-success" />
+                <a asp-action="Index" class="btn btn-secondary ms-2">Quay lại</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-3">
+    <small class="text-muted">
+        <i class="bi bi-info-circle"></i> 
+        Mã sinh viên: <strong>@Model.MaSinhVien</strong> (không thể thay đổi)
+    </small>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,64 @@
+@model Secure_Academic_Management.ViewModels.SinhVienCreateViewModel
+
+@{
+    ViewData["Title"] = "Tiếp nhận hồ sơ sinh viên mới";
+}
+
+<div class="max-w-2xl mx-auto">
+    <div class="mb-6">
+        <a asp-action="Index" class="inline-flex items-center text-[#635F69] hover:text-[#7C3AED] font-bold transition-colors mb-4">
+            <svg class="w-5 h-5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Quay lại danh sách
+        </a>
+        <h1 class="text-4xl font-black font-['Nunito'] text-[#332F3A]">Tiếp nhận hồ sơ mới</h1>
+        <p class="text-[#635F69] font-medium mt-2">Hệ thống sẽ tự động cấp mã sinh viên và đặt trạng thái "Đang học".</p>
+    </div>
+
+    <div class="clay-card p-8 sm:p-10">
+        <form asp-action="Create" method="post" class="space-y-6">
+            <div asp-validation-summary="ModelOnly" class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-clay-md text-sm font-medium" role="alert"></div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="md:col-span-2">
+                    <label asp-for="HoTen" class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Họ và tên</label>
+                    <input asp-for="HoTen" class="clay-input w-full" placeholder="Ví dụ: Nguyễn Văn A" />
+                    <span asp-validation-for="HoTen" class="text-red-500 text-sm mt-1 block ml-1"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Email" class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Email</label>
+                    <input asp-for="Email" class="clay-input w-full" placeholder="sinhvien@university.edu.vn" />
+                    <span asp-validation-for="Email" class="text-red-500 text-sm mt-1 block ml-1"></span>
+                </div>
+
+                <div>
+                    <label asp-for="SoDienThoai" class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Số điện thoại</label>
+                    <input asp-for="SoDienThoai" class="clay-input w-full" placeholder="09xxxxxxxx" />
+                    <span asp-validation-for="SoDienThoai" class="text-red-500 text-sm mt-1 block ml-1"></span>
+                </div>
+
+                <div class="md:col-span-2">
+                    <label asp-for="NgaySinh" class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Ngày sinh</label>
+                    <input asp-for="NgaySinh" class="clay-input w-full" type="date" />
+                    <span asp-validation-for="NgaySinh" class="text-red-500 text-sm mt-1 block ml-1"></span>
+                </div>
+            </div>
+
+            <div class="pt-4 flex gap-4">
+                <button type="submit" class="clay-btn clay-btn-primary flex-1 active-press">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                    Tiếp nhận và cấp mã
+                </button>
+                <a asp-action="Index" class="clay-btn clay-btn-secondary flex-1">
+                    Hủy bỏ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

@@ -1,0 +1,41 @@
+@model Secure_Academic_Management.Models.SinhVien
+
+@{
+    ViewData["Title"] = "Xóa hồ sơ sinh viên";
+}
+
+<h1 class="text-danger">@ViewData["Title"]</h1>
+<h3>Bạn có chắc chắn muốn xóa hồ sơ này?</h3>
+<hr />
+
+<div class="alert alert-warning" role="alert">
+    <strong>Cảnh báo:</strong> Hành động này sẽ xóa vĩnh viễn hồ sơ sinh viên.
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <dl class="row">
+            <dt class="col-sm-4">Mã sinh viên</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.MaSinhVien)</dd>
+
+            <dt class="col-sm-4">Họ và tên</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.HoTen)</dd>
+
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
+
+            <dt class="col-sm-4">Trạng thái</dt>
+            <dd class="col-sm-8">
+                <span class="badge @(Model.TrangThai == "Đang học" ? "bg-success" : "bg-secondary")">
+                    @Html.DisplayFor(model => model.TrangThai)
+                </span>
+            </dd>
+        </dl>
+
+        <form asp-action="Delete" method="post">
+            <input type="hidden" asp-for="MaSinhVien" />
+            <input type="submit" value="Xóa vĩnh viễn" class="btn btn-danger" />
+            <a asp-action="Index" class="btn btn-secondary ms-2">Hủy bỏ</a>
+        </form>
+    </div>
+</div>

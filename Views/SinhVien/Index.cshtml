@@ -1,0 +1,77 @@
+@model IEnumerable<Secure_Academic_Management.Models.SinhVien>
+
+@{
+    ViewData["Title"] = "Danh sách sinh viên";
+}
+
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <div>
+            <h1 class="text-4xl font-black font-['Nunito'] text-[#332F3A]">Danh sách Sinh viên</h1>
+            <p class="text-[#635F69] font-medium mt-1">Quản lý hồ sơ và quá trình theo học</p>
+        </div>
+        <a asp-action="Create" class="clay-btn clay-btn-primary active-press">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Tiếp nhận hồ sơ mới
+        </a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="clay-badge clay-badge-success p-4 text-base font-bold flex items-center gap-2 animate-clay-breathe">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            @TempData["SuccessMessage"]
+        </div>
+    }
+
+    <!-- Clay Table -->
+    <div class="overflow-x-auto">
+        <table class="clay-table">
+            <thead>
+                <tr>
+                    <th>Mã sinh viên</th>
+                    <th>Họ và tên</th>
+                    <th>Email</th>
+                    <th>Ngày sinh</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr class="group transition-colors duration-200">
+                        <td class="font-bold text-[#7C3AED]">@Html.DisplayFor(modelItem => item.MaSinhVien)</td>
+                        <td class="font-medium">@Html.DisplayFor(modelItem => item.HoTen)</td>
+                        <td class="text-[#635F69]">@Html.DisplayFor(modelItem => item.Email)</td>
+                        <td class="text-[#635F69]">@item.NgaySinh.ToString("dd/MM/yyyy")</td>
+                        <td>
+                            @if (item.TrangThai == "Đang học")
+                            {
+                                <span class="clay-badge clay-badge-success">Đang học</span>
+                            }
+                            else
+                            {
+                                <span class="clay-badge clay-badge-warning">@Html.DisplayFor(modelItem => item.TrangThai)</span>
+                            }
+                        </td>
+                        <td class="text-center">
+                            <div class="flex items-center justify-center gap-2">
+                                <a asp-action="Edit" asp-route-id="@item.MaSinhVien" class="w-9 h-9 rounded-xl bg-[#F4F1FA] text-[#F59E0B] flex items-center justify-center hover:bg-[#F59E0B] hover:text-white transition-all duration-200 shadow-sm" title="Sửa">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>
+                                </a>
+                                <a asp-action="Details" asp-route-id="@item.MaSinhVien" class="w-9 h-9 rounded-xl bg-[#F4F1FA] text-[#0EA5E9] flex items-center justify-center hover:bg-[#0EA5E9] hover:text-white transition-all duration-200 shadow-sm" title="Chi tiết">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path></svg>
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@item.MaSinhVien" class="w-9 h-9 rounded-xl bg-[#F4F1FA] text-[#EF4444] flex items-center justify-center hover:bg-[#EF4444] hover:text-white transition-all duration-200 shadow-sm" title="Xóa">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

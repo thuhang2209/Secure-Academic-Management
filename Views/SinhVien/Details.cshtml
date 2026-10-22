@@ -1,0 +1,59 @@
+@model Secure_Academic_Management.Models.SinhVien
+
+@{
+    ViewData["Title"] = "Chi tiết hồ sơ sinh viên";
+}
+
+<h1>@ViewData["Title"]</h1>
+<hr />
+
+<div class="row">
+    <div class="col-md-8">
+        <dl class="row">
+            <dt class="col-sm-3">Mã sinh viên</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.MaSinhVien)</dd>
+
+            <dt class="col-sm-3">Họ và tên</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.HoTen)</dd>
+
+            <dt class="col-sm-3">Email</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.Email)</dd>
+
+            <dt class="col-sm-3">Số điện thoại</dt>
+            <dd class="col-sm-9">
+                @if (string.IsNullOrEmpty(Model.SoDienThoai))
+                {
+                    <span class="text-muted">Chưa cập nhật</span>
+                }
+                else
+                {
+                    @Html.DisplayFor(model => model.SoDienThoai)
+                }
+            </dd>
+
+            <dt class="col-sm-3">Ngày sinh</dt>
+            <dd class="col-sm-9">@Html.DisplayFor(model => model.NgaySinh)</dd>
+
+            <dt class="col-sm-3">Tuổi</dt>
+            <dd class="col-sm-9">
+                @{
+                    var age = DateTime.Now.Year - Model.NgaySinh.Year;
+                    if (Model.NgaySinh.Date > DateTime.Now.AddYears(-age)) age--;
+                }
+                @age tuổi
+            </dd>
+
+            <dt class="col-sm-3">Trạng thái</dt>
+            <dd class="col-sm-9">
+                <span class="badge @(Model.TrangThai == "Đang học" ? "bg-success" : "bg-secondary")">
+                    @Html.DisplayFor(model => model.TrangThai)
+                </span>
+            </dd>
+        </dl>
+    </div>
+</div>
+
+<div class="form-group mt-4">
+    <a asp-action="Edit" asp-route-id="@Model.MaSinhVien" class="btn btn-warning">Chỉnh sửa</a>
+    <a asp-action="Index" class="btn btn-secondary ms-2">Quay lại danh sách</a>
+</div>

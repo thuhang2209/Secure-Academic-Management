@@ -1,8 +1,43 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Trang chủ";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="space-y-8">
+    <!-- Hero Section -->
+    <div class="text-center py-8">
+        <h1 class="text-5xl sm:text-6xl font-black font-['Nunito'] gradient-text mb-4">
+            Hệ thống Quản lý Sinh viên
+        </h1>
+        <p class="text-xl text-[#635F69] font-medium max-w-2xl mx-auto leading-relaxed">
+            Hệ thống quản lý hồ sơ người học và quá trình theo học an toàn, bảo mật và hiện đại.
+        </p>
+    </div>
+
+    <!-- Bento Grid Actions -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <!-- Card 1: Quản lý (Large) -->
+        <div class="md:col-span-2 clay-card hover-lift group cursor-pointer" onclick="window.location.href='@Url.Action("Index", "SinhVien")'">
+            <div class="flex items-start justify-between">
+                <div>
+                    <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#A78BFA] to-[#7C3AED] flex items-center justify-center shadow-clay-button mb-4 group-hover:scale-110 transition-transform duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                    </div>
+                    <h3 class="text-2xl font-black font-['Nunito'] text-[#332F3A] mb-2">Quản lý Sinh viên</h3>
+                    <p class="text-[#635F69] font-medium">Tiếp nhận hồ sơ, cấp mã sinh viên và theo dõi quá trình học tập với các biện pháp bảo mật đa tầng.</p>
+                </div>
+                <div class="hidden sm:block text-[#7C3AED] group-hover:translate-x-2 transition-transform duration-300">
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Card 2: Tạo mới -->
+        <div class="clay-card hover-lift group cursor-pointer" onclick="window.location.href='@Url.Action("Create", "SinhVien")'">
+            <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-[#34D399] to-[#10B981] flex items-center justify-center shadow-clay-button mb-4 group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path></svg>
+            </div>
+            <h3 class="text-xl font-black font-['Nunito'] text-[#332F3A] mb-2">Tiếp nhận mới</h3>
+            <p class="text-[#635F69] font-medium text-sm">Tạo hồ sơ và cấp mã sinh viên tự động.</p>
+        </div>
+    </div>
 </div>
