@@ -26,5 +26,6 @@ namespace Secure_Academic_Management.Models
 
         // Quan hệ 1-nhiều
         public virtual ICollection<Diem> Diems { get; set; } = new List<Diem>();
+        public virtual ICollection<LichSuTrangThai> LichSuTrangThais { get; set; } = new List<LichSuTrangThai>();
     }
 }

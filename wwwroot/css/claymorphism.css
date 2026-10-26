@@ -23,6 +23,13 @@
     --shadow-white: rgba(255, 255, 255, 0.9);
 }
 
+/* Force UTF-8 encoding and Vietnamese font support */
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
 body {
     font-family: 'DM Sans', sans-serif !important;
     background-color: var(--clay-canvas);
@@ -38,6 +45,10 @@ h1, h2, h3, h4, h5, h6, .clay-heading, .font-\[\'Nunito\'\] {
     line-height: 1.1;
     letter-spacing: -0.02em;
 }
+
+/* Ensure all form elements use correct font */
+input, textarea, select, button {
+    font-family: inherit;
 }
 
 /* 3. SHADOW SYSTEM - 4-Layer Architecture */

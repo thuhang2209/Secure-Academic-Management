@@ -1,0 +1,108 @@
+﻿@model Secure_Academic_Management.ViewModels.CapNhatTrangThaiViewModel
+
+@{
+    ViewData["Title"] = "Xác nhận Thay đổi Trạng thái";
+}
+
+<div class="flex items-center justify-center min-h-[60vh] py-8">
+    <div class="w-full max-w-2xl clay-card p-8 sm:p-10 animate-clay-float border-t-4 border-t-[#F59E0B]">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#FBBF24] to-[#F59E0B] flex items-center justify-center shadow-clay-button mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <h1 class="text-2xl font-black font-['Nunito'] text-[#332F3A]">Xác nhận Thay đổi Trạng thái</h1>
+            <p class="text-[#635F69] mt-2 font-medium">Mã sinh viên: <span class="text-[#7C3AED] font-bold">@Model.MaSinhVien</span></p>
+        </div>
+
+        <form asp-action="UpdateStatus" method="post" enctype="multipart/form-data" class="space-y-6">
+            <div asp-validation-summary="ModelOnly" class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-clay-md text-sm font-medium" role="alert"></div>
+
+            <input type="hidden" asp-for="MaSinhVien" />
+
+            <!-- Trạng thái mới -->
+            <div>
+                <label asp-for="TrangThaiMoi"
+                       class="block text-sm font-bold font-['Nunito'] text-[#635F69] mb-2 ml-1">
+                    Chuyển sang trạng thái
+                </label>
+
+                <select asp-for="TrangThaiMoi"
+                        class="clay-input w-full appearance-none cursor-pointer">
+                    <option value="">-- Chọn trạng thái mới --</option>
+                    <option value="Đang học">Đang học</option>
+                    <option value="Bảo lưu">Bảo lưu</option>
+                    <option value="Tạm ngừng">Tạm ngừng học</option>
+                    <option value="Đã tốt nghiệp">Đã tốt nghiệp</option>
+                    <option value="Đã thôi học">Đã thôi học</option>
+                </select>
+
+                <span asp-validation-for="TrangThaiMoi"
+                      class="text-red-500 text-sm mt-1 block ml-1"></span>
+            </div>
+
+            <!-- Lý do -->
+            <div>
+                <label asp-for="LyDo" class="block text-sm font-bold font-['Nunito'] text-[#635F69] mb-2 ml-1">
+                    Căn cứ thay đổi <span class="text-red-500">*</span>
+                </label>
+                <textarea asp-for="LyDo" rows="4" class="clay-input w-full resize-none" placeholder="Ví dụ: Đơn xin bảo lưu số 123/KH-2024 ngày 20/10/2024..."></textarea>
+                <span asp-validation-for="LyDo" class="text-red-500 text-sm mt-1 block ml-1"></span>
+            </div>
+
+            <!-- Upload File -->
+            <div>
+                <label class="block text-sm font-bold font-['Nunito'] text-[#635F69] mb-2 ml-1">
+                    Tài liệu đính kèm (Bằng chứng)
+                </label>
+                <div class="clay-input w-full p-4">
+                    <input type="file" asp-for="TaiLieuDinhKem" class="w-full text-sm text-[#635F69]
+                    file:mr-4 file:py-2 file:px-4
+                    file:rounded-xl file:border-0
+                    file:text-sm file:font-bold
+                    file:bg-gradient-to-br file:from-[#A78BFA] file:to-[#7C3AED]
+                    file:text-white
+                    hover:file:cursor-pointer
+                    file:active:scale-95
+                    transition-all" />
+                    <p class="text-xs text-[#635F69] mt-2">
+                        Chấp nhận: PDF, JPG, PNG (Tối đa 5MB)
+                    </p>
+                </div>
+                <span asp-validation-for="TaiLieuDinhKem" class="text-red-500 text-sm mt-1 block ml-1"></span>
+            </div>
+
+            <!-- Ghi chú Audit -->
+            <div class="bg-blue-50 border border-blue-200 rounded-clay-md p-4">
+                <p class="text-xs text-blue-800 font-medium flex items-start gap-2">
+                    <svg class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <span>Thông tin này sẽ được lưu vào <strong>nhật ký kiểm toán (Audit Log)</strong> của hệ thống.</span>
+                </p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="space-y-3 pt-4">
+                <button type="submit" class="clay-btn clay-btn-primary w-full text-lg active-press bg-gradient-to-br from-[#FBBF24] to-[#F59E0B] hover:from-[#F59E0B] hover:to-[#D97706]">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Xác nhận thay đổi
+                </button>
+
+                <a asp-action="Edit" asp-route-id="@Model.MaSinhVien" class="clay-btn clay-btn-secondary w-full text-lg active-press block text-center">
+                    Hủy bỏ
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

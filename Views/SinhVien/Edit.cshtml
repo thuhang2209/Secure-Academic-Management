@@ -1,71 +1,98 @@
 @model Secure_Academic_Management.ViewModels.SinhVienEditViewModel
 
 @{
-    ViewData["Title"] = "Cập nhật thông tin sinh viên";
+    ViewData["Title"] = "Chỉnh sửa hồ sơ sinh viên";
 }
 
-<h1>@ViewData["Title"]</h1>
-<hr />
+<div class="max-w-4xl mx-auto space-y-8">
+    <!-- Header -->
+    <div class="flex items-center gap-4">
+        <a asp-action="Index" class="w-10 h-10 rounded-xl bg-white flex items-center justify-center shadow-clay-button hover:-translate-y-1 transition-transform text-[#635F69] hover:text-[#7C3AED]">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        </a>
+        <div>
+            <h1 class="text-3xl font-black font-['Nunito'] text-[#332F3A]">Chỉnh sửa hồ sơ</h1>
+            <p class="text-[#635F69] font-medium">Mã sinh viên: <span class="text-[#7C3AED] font-bold">@Model.MaSinhVien</span></p>
+        </div>
+    </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <form asp-action="Edit" method="post">
-            <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
-            
-            <!-- Hidden field để lưu MaSinhVien (không cho phép sửa) -->
-            <input type="hidden" asp-for="MaSinhVien" />
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Cột trái: Form chỉnh sửa thông tin cơ bản -->
+        <div class="lg:col-span-2 clay-card p-8">
+            <h2 class="text-xl font-black font-['Nunito'] text-[#332F3A] mb-6 flex items-center gap-2">
+                <svg class="w-5 h-5 text-[#7C3AED]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                Thông tin cá nhân
+            </h2>
 
-            <div class="form-group mb-3">
-                <label asp-for="HoTen" class="control-label fw-bold"></label>
-                <input asp-for="HoTen" class="form-control" />
-                <span asp-validation-for="HoTen" class="text-danger"></span>
+            <form asp-action="Edit" method="post" class="space-y-5">
+                <div asp-validation-summary="ModelOnly" class="bg-red-50 border border-red-200 text-red-600 px-4 py-3 rounded-clay-md text-sm font-medium" role="alert"></div>
+
+                <!-- Hidden ID để chống IDOR -->
+                <input type="hidden" asp-for="MaSinhVien" />
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <div class="md:col-span-2">
+                        <label asp-for="HoTen" class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Họ và tên</label>
+                        <input asp-for="HoTen" class="clay-input w-full" />
+                        <span asp-validation-for="HoTen" class="text-red-500 text-sm mt-1 block ml-1"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="Email" class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Email</label>
+                        <input asp-for="Email" class="clay-input w-full" />
+                        <span asp-validation-for="Email" class="text-red-500 text-sm mt-1 block ml-1"></span>
+                    </div>
+
+                    <div>
+                        <label asp-for="SoDienThoai" class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Số điện thoại</label>
+                        <input asp-for="SoDienThoai" class="clay-input w-full" />
+                        <span asp-validation-for="SoDienThoai" class="text-red-500 text-sm mt-1 block ml-1"></span>
+                    </div>
+
+                    <div class="md:col-span-2">
+                        <label asp-for="NgaySinh" class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Ngày sinh</label>
+                        <input asp-for="NgaySinh" class="clay-input w-full" type="date" />
+                        <span asp-validation-for="NgaySinh" class="text-red-500 text-sm mt-1 block ml-1"></span>
+                    </div>
+                </div>
+
+                <div class="pt-4 flex gap-4">
+                    <button type="submit" class="clay-btn clay-btn-primary flex-1 active-press">
+                        Lưu thay đổi
+                    </button>
+                    <a asp-action="Index" class="clay-btn clay-btn-secondary flex-1 text-center">
+                        Hủy bỏ
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Cột phải: Thẻ quản lý Trạng thái (Module 2) -->
+        <div class="clay-card p-8 flex flex-col justify-between border-l-4 border-l-[#F59E0B]">
+            <div>
+                <h2 class="text-xl font-black font-['Nunito'] text-[#332F3A] mb-4 flex items-center gap-2">
+                    <svg class="w-5 h-5 text-[#F59E0B]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    Trạng thái hiện tại
+                </h2>
+
+                <div class="bg-[#F4F1FA] rounded-clay-md p-4 mb-6 text-center shadow-clay-pressed">
+                    <span class="text-sm text-[#635F69] font-medium block mb-1">Trạng thái</span>
+                    <span class="text-2xl font-black font-['Nunito'] text-[#7C3AED]">@Model.TrangThai</span>
+                </div>
+
             </div>
 
-            <div class="form-group mb-3">
-                <label asp-for="Email" class="control-label fw-bold"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="SoDienThoai" class="control-label fw-bold"></label>
-                <input asp-for="SoDienThoai" class="form-control" />
-                <span asp-validation-for="SoDienThoai" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="NgaySinh" class="control-label fw-bold"></label>
-                <input asp-for="NgaySinh" class="form-control" type="date" />
-                <span asp-validation-for="NgaySinh" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mb-3">
-                <label asp-for="TrangThai" class="control-label fw-bold"></label>
-                <select asp-for="TrangThai" class="form-control">
-                    <option value="Đang học">Đang học</option>
-                    <option value="Bảo lưu">Bảo lưu</option>
-                    <option value="Tạm ngừng">Tạm ngừng</option>
-                    <option value="Đã tốt nghiệp">Đã tốt nghiệp</option>
-                    <option value="Đã thôi học">Đã thôi học</option>
-                </select>
-                <span asp-validation-for="TrangThai" class="text-danger"></span>
-            </div>
-
-            <div class="form-group mt-4">
-                <input type="submit" value="Lưu thay đổi" class="btn btn-success" />
-                <a asp-action="Index" class="btn btn-secondary ms-2">Quay lại</a>
-            </div>
-        </form>
+            <!-- Checklist M03 #20: Tách biệt luồng cập nhật trạng thái để yêu cầu lý do bắt buộc -->
+            <a asp-action="UpdateStatus" asp-route-id="@Model.MaSinhVien" class="clay-btn clay-btn-primary w-full active-press bg-gradient-to-br from-[#FBBF24] to-[#F59E0B] hover:from-[#F59E0B] hover:to-[#D97706]">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path></svg>
+                Cập nhật Trạng thái
+            </a>
+        </div>
     </div>
 </div>
 
-<div class="mt-3">
-    <small class="text-muted">
-        <i class="bi bi-info-circle"></i> 
-        Mã sinh viên: <strong>@Model.MaSinhVien</strong> (không thể thay đổi)
-    </small>
-</div>
-
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

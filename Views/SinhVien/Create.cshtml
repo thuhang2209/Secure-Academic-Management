@@ -61,4 +61,25 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        // Validation tuổi client-side
+        $(document).ready(function() {
+            $('#NgaySinh').on('change', function() {
+                var ngaySinh = new Date($(this).val());
+                var ngayHienTai = new Date();
+                var tuoi = ngayHienTai.getFullYear() - ngaySinh.getFullYear();
+                var monthDiff = ngayHienTai.getMonth() - ngaySinh.getMonth();
+                
+                if (monthDiff < 0 || (monthDiff === 0 && ngayHienTai.getDate() < ngaySinh.getDate())) {
+                    tuoi--;
+                }
+                
+                if (tuoi < 17) {
+                    alert('Sinh viên phải đủ 17 tuổi trở lên!');
+                    $(this).val('');
+                }
+            });
+        });
+    </script>
 }

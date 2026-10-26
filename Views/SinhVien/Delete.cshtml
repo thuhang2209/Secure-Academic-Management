@@ -4,38 +4,109 @@
     ViewData["Title"] = "Xóa hồ sơ sinh viên";
 }
 
-<h1 class="text-danger">@ViewData["Title"]</h1>
-<h3>Bạn có chắc chắn muốn xóa hồ sơ này?</h3>
-<hr />
+<div class="flex items-center justify-center min-h-[60vh] py-8">
+    <div class="w-full max-w-2xl clay-card p-8 sm:p-10 animate-clay-float border-t-4 border-t-[#EF4444]">
+        <!-- Header với Icon cảnh báo -->
+        <div class="text-center mb-8">
+            <div class="w-20 h-20 mx-auto rounded-2xl bg-gradient-to-br from-[#FCA5A5] to-[#EF4444] flex items-center justify-center shadow-clay-button mb-4 animate-pulse">
+                <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-black font-['Nunito'] text-[#332F3A] mb-2">Xóa hồ sơ sinh viên</h1>
+            <p class="text-[#635F69] font-medium">Bạn có chắc chắn muốn xóa hồ sơ này?</p>
+        </div>
 
-<div class="alert alert-warning" role="alert">
-    <strong>Cảnh báo:</strong> Hành động này sẽ xóa vĩnh viễn hồ sơ sinh viên.
-</div>
+        <!-- Cảnh báo quan trọng -->
+        <div class="bg-red-50 border-l-4 border-[#EF4444] rounded-clay-md p-5 mb-6">
+            <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-[#EF4444] flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <div>
+                    <h3 class="font-bold text-[#EF4444] mb-1">Cảnh báo quan trọng</h3>
+                    <p class="text-sm text-gray-700">
+                        Hành động này sẽ <strong>xóa vĩnh viễn</strong> hồ sơ sinh viên và tất cả dữ liệu liên quan. 
+                        Hành động này <strong>không thể hoàn tác</strong>.
+                    </p>
+                </div>
+            </div>
+        </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <dl class="row">
-            <dt class="col-sm-4">Mã sinh viên</dt>
-            <dd class="col-sm-8">@Html.DisplayFor(model => model.MaSinhVien)</dd>
+        <!-- Thông tin sinh viên -->
+        <div class="bg-gradient-to-br from-[#F4F1FA] to-white rounded-clay-md p-6 mb-6 shadow-clay-pressed">
+            <h2 class="text-lg font-black font-['Nunito'] text-[#332F3A] mb-4 flex items-center gap-2">
+                <svg class="w-5 h-5 text-[#7C3AED]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                Thông tin sinh viên
+            </h2>
+            
+            <div class="space-y-3 text-sm">
+                <div class="flex justify-between items-center py-2 border-b border-[#E5E7EB]">
+                    <span class="text-[#635F69] font-medium">Mã sinh viên</span>
+                    <span class="font-bold text-[#7C3AED]">@Model.MaSinhVien</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-[#E5E7EB]">
+                    <span class="text-[#635F69] font-medium">Họ và tên</span>
+                    <span class="font-medium text-[#332F3A]">@Model.HoTen</span>
+                </div>
+                <div class="flex justify-between items-center py-2 border-b border-[#E5E7EB]">
+                    <span class="text-[#635F69] font-medium">Email</span>
+                    <span class="font-medium text-[#332F3A]">@Model.Email</span>
+                </div>
+                <div class="flex justify-between items-center py-2">
+                    <span class="text-[#635F69] font-medium">Trạng thái</span>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold 
+                        @(Model.TrangThai == "Đang học" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700")">
+                        @Model.TrangThai
+                    </span>
+                </div>
+            </div>
+        </div>
 
-            <dt class="col-sm-4">Họ và tên</dt>
-            <dd class="col-sm-8">@Html.DisplayFor(model => model.HoTen)</dd>
-
-            <dt class="col-sm-4">Email</dt>
-            <dd class="col-sm-8">@Html.DisplayFor(model => model.Email)</dd>
-
-            <dt class="col-sm-4">Trạng thái</dt>
-            <dd class="col-sm-8">
-                <span class="badge @(Model.TrangThai == "Đang học" ? "bg-success" : "bg-secondary")">
-                    @Html.DisplayFor(model => model.TrangThai)
-                </span>
-            </dd>
-        </dl>
-
-        <form asp-action="Delete" method="post">
+        <!-- Checklist M03 #12: Form với Anti-Forgery Token -->
+        <form asp-action="Delete" method="post" class="space-y-3">
             <input type="hidden" asp-for="MaSinhVien" />
-            <input type="submit" value="Xóa vĩnh viễn" class="btn btn-danger" />
-            <a asp-action="Index" class="btn btn-secondary ms-2">Hủy bỏ</a>
+            
+            <div class="flex gap-3">
+                <!-- Nút Hủy -->
+                <a asp-action="Index" class="clay-btn clay-btn-secondary flex-1 active-press">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    Hủy bỏ
+                </a>
+                
+                <!-- Nút Xóa - Màu đỏ cảnh báo -->
+                <button type="submit" class="clay-btn clay-btn-primary flex-1 active-press bg-gradient-to-br from-[#FCA5A5] to-[#EF4444] hover:from-[#EF4444] hover:to-[#DC2626] shadow-lg">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                    </svg>
+                    Xóa vĩnh viễn
+                </button>
+            </div>
         </form>
+
+        <!-- Ghi chú thêm -->
+        <div class="mt-6 text-center">
+            <p class="text-xs text-[#635F69]">
+                <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                Thao tác này được ghi nhận trong nhật ký kiểm toán (Audit Log)
+            </p>
+        </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Xác nhận thêm lần nữa trước khi xóa
+        document.querySelector('form').addEventListener('submit', function(e) {
+            if (!confirm('️ CẢNH BÁO: Bạn thực sự muốn xóa vĩnh viễn hồ sơ sinh viên này?\n\nHành động này KHÔNG THỂ hoàn tác!')) {
+                e.preventDefault();
+            }
+        });
+    </script>
+}

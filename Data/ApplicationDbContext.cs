@@ -15,6 +15,7 @@ namespace Secure_Academic_Management.Data
         public DbSet<SinhVien> SinhViens { get; set; }
         public DbSet<HocPhan> HocPhans { get; set; }
         public DbSet<Diem> Diems { get; set; }
+        public DbSet<LichSuTrangThai> LichSuTrangThais { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -37,6 +38,12 @@ namespace Secure_Academic_Management.Data
             builder.Entity<SinhVien>()
                 .HasIndex(s => s.Email)
                 .IsUnique();
+
+            builder.Entity<LichSuTrangThai>()
+                .HasOne(l => l.SinhVien)
+                .WithMany()
+                .HasForeignKey(l => l.MaSinhVien)
+                .OnDelete(DeleteBehavior.Restrict); // Không cho xóa sinh viên nếu còn lịch sử
         }
     }
 }

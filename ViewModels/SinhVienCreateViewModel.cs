@@ -27,6 +27,24 @@ namespace Secure_Academic_Management.ViewModels
         [DataType(DataType.Date)]
         public DateTime NgaySinh { get; set; }
 
+        // Method validation tuổi (tối thiểu 17 tuổi)
+        public static ValidationResult? ValidateAge(DateTime ngaySinh)
+        {
+            var tuoi = DateTime.Now.Year - ngaySinh.Year;
+
+            // Kiểm tra xem đã qua sinh nhật chưa
+            if (ngaySinh.Date > DateTime.Now.AddYears(-tuoi))
+                tuoi--;
+
+            if (tuoi < 17)
+            {
+                return new ValidationResult("Sinh viên phải đủ 17 tuổi trở lên (ngày sinh trước ngày " +
+                    DateTime.Now.AddYears(-17).ToString("dd/MM/yyyy") + ")");
+            }
+
+            return ValidationResult.Success;
+        }
+
         // Lưu ý: Chúng ta KHÔNG đưa các trường như "DiemSo", "TrangThai", "IdentityUserId" vào đây
         // để ngăn chặn tấn công Over-posting (Checklist M03 #11, #18)
     }

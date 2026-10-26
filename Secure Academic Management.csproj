@@ -34,8 +34,4 @@
     <PackageReference Include="System.Security.Cryptography.Pkcs" Version="10.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Views\SinhVien\" />
-  </ItemGroup>
-
 </Project>
