@@ -1,0 +1,24 @@
+@model Secure_Academic_Management.ViewModels.GradeListViewModel
+@{
+    ViewData["Title"] = "Kết quả học tập";
+}
+<div class="clay-card p-6 space-y-5">
+    <div class="flex flex-wrap items-center justify-between gap-3">
+        <div><h1 class="text-2xl font-black">Kết quả học tập</h1><p>@Model.Student.MaSinhVien - @Model.Student.HoTen</p></div>
+        <a asp-action="AddGrade" asp-route-studentId="@Model.Student.MaSinhVien" class="clay-btn clay-btn-primary">Nhập điểm</a>
+    </div>
+    <table class="w-full text-left">
+        <thead><tr><th class="p-3">Học phần</th><th class="p-3">Điểm</th><th class="p-3">Cập nhật</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var grade in Model.Grades)
+        {
+            <tr class="border-t border-slate-200">
+                <td class="p-3">@grade.MaHocPhan - @grade.HocPhan.TenHocPhan</td>
+                <td class="p-3 font-bold">@grade.DiemSo.ToString("0.##")</td>
+                <td class="p-3">@grade.NgayCapNhat.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</td>
+                <td class="p-3"><form asp-action="DeleteGrade" method="post">@Html.AntiForgeryToken()<input type="hidden" name="id" value="@grade.Id" /><input type="hidden" name="studentId" value="@Model.Student.MaSinhVien" /><button class="text-red-600" type="submit">Xóa</button></form></td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

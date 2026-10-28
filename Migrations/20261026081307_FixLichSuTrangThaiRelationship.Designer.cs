@@ -12,15 +12,15 @@ using Secure_Academic_Management.Data;
 namespace Secure_Academic_Management.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20261021043502_AddM03Entities")]
-    partial class AddM03Entities
+    [Migration("20261026081307_FixLichSuTrangThaiRelationship")]
+    partial class FixLichSuTrangThaiRelationship
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -244,7 +244,7 @@ namespace Secure_Academic_Management.Migrations
 
                     b.Property<string>("MaSinhVien")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("NgayCapNhat")
                         .HasColumnType("datetime2");
@@ -279,10 +279,61 @@ namespace Secure_Academic_Management.Migrations
                     b.ToTable("HocPhans");
                 });
 
+            modelBuilder.Entity("Secure_Academic_Management.Models.LichSuTrangThai", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("DuongDanFile")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("LyDo")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("MaSinhVien")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("NgayThayDoi")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NguoiThucHienId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("TenFileGoc")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("TrangThaiCu")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("TrangThaiMoi")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaSinhVien");
+
+                    b.ToTable("LichSuTrangThais");
+                });
+
             modelBuilder.Entity("Secure_Academic_Management.Models.SinhVien", b =>
                 {
                     b.Property<string>("MaSinhVien")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -309,6 +360,9 @@ namespace Secure_Academic_Management.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaSinhVien");
+
+                    b.HasIndex("Email")
+                        .IsUnique();
 
                     b.HasIndex("IdentityUserId");
 
@@ -385,6 +439,17 @@ namespace Secure_Academic_Management.Migrations
                     b.Navigation("SinhVien");
                 });
 
+            modelBuilder.Entity("Secure_Academic_Management.Models.LichSuTrangThai", b =>
+                {
+                    b.HasOne("Secure_Academic_Management.Models.SinhVien", "SinhVien")
+                        .WithMany("LichSuTrangThais")
+                        .HasForeignKey("MaSinhVien")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SinhVien");
+                });
+
             modelBuilder.Entity("Secure_Academic_Management.Models.SinhVien", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "IdentityUser")
@@ -397,6 +462,8 @@ namespace Secure_Academic_Management.Migrations
             modelBuilder.Entity("Secure_Academic_Management.Models.SinhVien", b =>
                 {
                     b.Navigation("Diems");
+
+                    b.Navigation("LichSuTrangThais");
                 });
 #pragma warning restore 612, 618
         }

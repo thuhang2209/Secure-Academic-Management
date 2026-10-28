@@ -1,0 +1,65 @@
+@model Secure_Academic_Management.ViewModels.AccountProfileEditViewModel
+
+@{
+    ViewData["Title"] = "Thông tin cá nhân";
+}
+
+<div class="max-w-4xl mx-auto space-y-6">
+    <div class="text-center py-8">
+        <h1 class="text-4xl font-black font-['Nunito'] text-[#332F3A]">Thông tin cá nhân</h1>
+        <p class="text-[#635F69] mt-2">Thông tin tài khoản và quyền truy cập của bạn.</p>
+    </div>
+
+    <form asp-action="Profile" method="post" class="clay-card p-8 text-center">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="mb-6 text-left text-red-600 font-medium" role="alert"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="text-center">
+                <label asp-for="FullName" class="block text-base font-bold text-[#635F69] mb-2"></label>
+                <input asp-for="FullName" class="clay-input w-full text-center text-lg font-bold" />
+                <span asp-validation-for="FullName" class="text-red-600 text-sm"></span>
+            </div>
+            <div class="text-center">
+                <label asp-for="Email" class="block text-base font-bold text-[#635F69] mb-2"></label>
+                <input asp-for="Email" class="clay-input w-full text-center text-lg font-bold" />
+                <span asp-validation-for="Email" class="text-red-600 text-sm"></span>
+            </div>
+            <div class="text-center">
+                <label asp-for="PhoneNumber" class="block text-base font-bold text-[#635F69] mb-2"></label>
+                <input asp-for="PhoneNumber" class="clay-input w-full text-center text-lg font-bold" placeholder="Chưa cập nhật" />
+                <span asp-validation-for="PhoneNumber" class="text-red-600 text-sm"></span>
+            </div>
+            <div class="text-center">
+                <label class="block text-base font-bold text-[#635F69] mb-2">Vai trò</label>
+                <div class="clay-input w-full flex items-center justify-center bg-[#F4F1FA] text-lg font-bold">@Model.RoleText</div>
+            </div>
+            @if (Model.IsStudent)
+            {
+                <div class="text-center">
+                    <label asp-for="NgaySinh" class="block text-base font-bold text-[#635F69] mb-2"></label>
+                    <input asp-for="NgaySinh" class="clay-input w-full text-center text-lg font-bold" type="date" />
+                    <span asp-validation-for="NgaySinh" class="text-red-600 text-sm"></span>
+                </div>
+                <div class="text-center">
+                    <label class="block text-base font-bold text-[#635F69] mb-2">Trạng thái</label>
+                    <div class="clay-input w-full flex items-center justify-center bg-[#F4F1FA] text-lg font-bold">@Model.StudentProfile!.TrangThai</div>
+                </div>
+            }
+        </div>
+        <button type="submit" class="clay-btn clay-btn-primary mt-8">Cập nhật thông tin</button>
+    </form>
+
+    @if (Model.StudentProfile != null)
+    {
+        <div class="clay-card p-8 text-center">
+            <h2 class="text-3xl font-black font-['Nunito'] mb-5">Hồ sơ sinh viên</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div><span class="block text-base font-bold text-[#635F69] mb-2">Mã sinh viên</span><div class="clay-input flex items-center justify-center bg-[#F4F1FA] text-lg font-bold">@Model.StudentProfile.MaSinhVien</div></div>
+                <div><span class="block text-base font-bold text-[#635F69] mb-2">Trạng thái</span><div class="clay-input flex items-center justify-center bg-[#F4F1FA] text-lg font-bold">@Model.StudentProfile.TrangThai</div></div>
+                <div><span class="block text-base font-bold text-[#635F69] mb-2">Ngày sinh</span><div class="clay-input flex items-center justify-center bg-[#F4F1FA] text-lg font-bold">@Model.StudentProfile.NgaySinh.ToString("dd/MM/yyyy")</div></div>
+                <div><span class="block text-base font-bold text-[#635F69] mb-2">Số điện thoại</span><div class="clay-input flex items-center justify-center bg-[#F4F1FA] text-lg font-bold">@(Model.StudentProfile.SoDienThoai ?? "Chưa cập nhật")</div></div>
+            </div>
+            <a asp-controller="Student" asp-action="Profile" class="clay-btn clay-btn-primary mt-6">Mở hồ sơ học tập</a>
+        </div>
+    }
+</div>

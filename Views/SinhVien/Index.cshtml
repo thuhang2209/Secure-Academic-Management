@@ -17,12 +17,30 @@
         </a>
     </div>
 
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="clay-badge clay-badge-success p-4 text-base font-bold flex items-center gap-2 animate-clay-breathe">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            @TempData["SuccessMessage"]
-        </div>
+    <form asp-action="Index" method="get" class="clay-card p-4 flex flex-col sm:flex-row gap-3" role="search">
+        <label for="student-search" class="sr-only">Tìm kiếm sinh viên</label>
+        <input id="student-search" name="searchString" value="@ViewData["CurrentFilter"]"
+               class="clay-input flex-1" placeholder="Tìm theo mã sinh viên hoặc họ tên..." />
+        <label for="student-status" class="sr-only">Lọc trạng thái</label>
+        <select id="student-status" name="trangThai" class="clay-input">
+            <option value="">Tất cả trạng thái</option>
+            @foreach (var status in new[] { "Đang học", "Bảo lưu", "Tạm ngừng học", "Đã tốt nghiệp", "Đã thôi học" })
+            {
+                <option value="@status" selected="@(string.Equals(ViewData["CurrentStatus"]?.ToString(), status, StringComparison.OrdinalIgnoreCase))">@status</option>
+            }
+        </select>
+        <button type="submit" class="clay-btn clay-btn-primary active-press">Tìm kiếm</button>
+        @if (ViewData["CurrentFilter"] != null)
+        {
+            <a asp-action="Index" class="clay-btn clay-btn-secondary active-press">Xóa lọc</a>
+        }
+    </form>
+
+    @{
+        var currentPage = (int?)ViewData["CurrentPage"] ?? 1;
+        var pageSize = (int?)ViewData["PageSize"] ?? 20;
+        var totalItems = (int?)ViewData["TotalItems"] ?? 0;
+        var totalPages = Math.Max(1, (int)Math.Ceiling(totalItems / (double)pageSize));
     }
 
     <!-- Clay Table -->
@@ -39,6 +57,16 @@
                 </tr>
             </thead>
             <tbody>
+                @if (!Model.Any())
+                {
+                    <tr>
+                        <td colspan="6" class="p-12 text-center">
+                            <div class="text-4xl mb-3" aria-hidden="true">◎</div>
+                            <p class="font-bold text-lg">Chưa tìm thấy hồ sơ phù hợp</p>
+                            <p class="text-[#635F69] mt-1">Thử từ khóa khác hoặc tiếp nhận hồ sơ mới.</p>
+                        </td>
+                    </tr>
+                }
                 @foreach (var item in Model)
                 {
                     <tr class="group transition-colors duration-200">
@@ -65,6 +93,20 @@
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
                                 </a>
                             </div>
+                            @if (totalPages > 1)
+                            {
+                                <nav class="flex items-center justify-center gap-3" aria-label="Phân trang">
+                                    @if (currentPage > 1)
+                                    {
+                                        <a asp-action="Index" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-trangThai="@ViewData["CurrentStatus"]" asp-route-page="@(currentPage - 1)" asp-route-pageSize="@pageSize" class="clay-btn clay-btn-secondary">Trang trước</a>
+                                    }
+                                    <span class="font-bold text-[#635F69]">Trang @currentPage / @totalPages</span>
+                                    @if (currentPage < totalPages)
+                                    {
+                                        <a asp-action="Index" asp-route-searchString="@ViewData["CurrentFilter"]" asp-route-trangThai="@ViewData["CurrentStatus"]" asp-route-page="@(currentPage + 1)" asp-route-pageSize="@pageSize" class="clay-btn clay-btn-secondary">Trang sau</a>
+                                    }
+                                </nav>
+                            }
                         </td>
                     </tr>
                 }

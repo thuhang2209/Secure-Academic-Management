@@ -18,6 +18,10 @@ namespace Secure_Academic_Management.ViewModels
         [Display(Name = "Căn cứ thay đổi")]
         public string LyDo { get; set; } = string.Empty;
 
+        [Required, DataType(DataType.Date)]
+        [Display(Name = "Có hiệu lực từ")]
+        public DateTime NgayHieuLuc { get; set; } = DateTime.Today;
+
         // File upload cho bằng chứng
         [Display(Name = "Tài liệu đính kèm")]
         public IFormFile? TaiLieuDinhKem { get; set; }

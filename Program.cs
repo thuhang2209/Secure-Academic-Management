@@ -1,8 +1,13 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using System.IO;
+using System.Threading.RateLimiting;
 // using Serilog.Enrichers.Environment;
 using Secure_Academic_Management.Data;
+using Secure_Academic_Management.Middleware;
+using Secure_Academic_Management.Health;
 
 // ============================================================================
 // 1. CẤU HÌNH SERILOG (Logging) - Checklist M03: Mục 15, 20, 23
@@ -47,6 +52,13 @@ try
             sqlOptions.EnableRetryOnFailure(); // Tự động thử lại nếu kết nối tạm thời bị lỗi
         }));
 
+    var dataProtectionPath = builder.Configuration["DataProtection:KeysPath"]
+        ?? Path.Combine(builder.Environment.ContentRootPath, "App_Data", "keys");
+    Directory.CreateDirectory(dataProtectionPath);
+    builder.Services.AddDataProtection()
+        .PersistKeysToFileSystem(new DirectoryInfo(dataProtectionPath))
+        .SetApplicationName("SecureAcademicManagement");
+
     // B. Cấu hình ASP.NET Core Identity - Checklist M03: Mục 9, 17
     builder.Services.AddDefaultIdentity<IdentityUser>(options =>
     {
@@ -69,6 +81,30 @@ try
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
     builder.Services.AddControllersWithViews();
+    builder.Services.AddHealthChecks()
+        .AddCheck<DatabaseHealthCheck>("sql-server");
+    builder.Services.AddRateLimiter(options =>
+    {
+        options.RejectionStatusCode = StatusCodes.Status429TooManyRequests;
+        options.AddPolicy("login", httpContext =>
+            RateLimitPartition.GetFixedWindowLimiter(
+                httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 10,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueLimit = 0
+                }));
+        options.GlobalLimiter = PartitionedRateLimiter.Create<HttpContext, string>(
+            httpContext => RateLimitPartition.GetFixedWindowLimiter(
+                httpContext.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+                _ => new FixedWindowRateLimiterOptions
+                {
+                    PermitLimit = 120,
+                    Window = TimeSpan.FromMinutes(1),
+                    QueueLimit = 0
+                }));
+    });
 
     // Cấu hình Cookie bảo mật (Checklist M03: Mục 12 - CSRF)
     builder.Services.ConfigureApplicationCookie(options =>
@@ -80,6 +116,28 @@ try
         options.LoginPath = "/Account/Login";
         options.LogoutPath = "/Account/Logout";
         options.AccessDeniedPath = "/Account/AccessDenied";
+        options.Events.OnRedirectToLogin = context =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+                return Task.CompletedTask;
+            }
+
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
+        options.Events.OnRedirectToAccessDenied = context =>
+        {
+            if (context.Request.Path.StartsWithSegments("/api"))
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                return Task.CompletedTask;
+            }
+
+            context.Response.Redirect(context.RedirectUri);
+            return Task.CompletedTask;
+        };
         options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
         options.SlidingExpiration = true;
     });
@@ -106,11 +164,27 @@ try
     app.UseHttpsRedirection();
     app.UseStaticFiles(); // Phục vụ file CSS, JS, hình ảnh
 
+    app.Use(async (context, next) =>
+    {
+        context.Response.Headers["X-Content-Type-Options"] = "nosniff";
+        context.Response.Headers["X-Frame-Options"] = "DENY";
+        context.Response.Headers["Referrer-Policy"] = "strict-origin-when-cross-origin";
+        context.Response.Headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()";
+        await next();
+    });
+
     app.UseRouting();
+    app.UseRateLimiter();
 
     // Thứ tự BẮT BUỘC: Authentication -> Authorization -> Endpoints
     app.UseAuthentication();
     app.UseAuthorization();
+
+    app.UseMiddleware<AuditAndMetricsMiddleware>();
+
+    app.MapHealthChecks("/health");
+    app.MapGet("/metrics", () =>
+        Results.Text(AuditAndMetricsMiddleware.RenderMetrics(), "text/plain"));
 
     app.MapControllerRoute(
         name: "default",

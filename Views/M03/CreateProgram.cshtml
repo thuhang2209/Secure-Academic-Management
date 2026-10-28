@@ -1,0 +1,15 @@
+@model Secure_Academic_Management.ViewModels.ChuongTrinhViewModel
+@{ ViewData["Title"] = "Thêm chương trình đào tạo"; }
+<div class="max-w-2xl mx-auto clay-card p-8">
+    <h1 class="text-2xl font-black mb-6">Thêm chương trình đào tạo</h1>
+    <form asp-action="CreateProgram" method="post" class="space-y-4">
+        <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
+        <div><label asp-for="MaChuongTrinh"></label><input asp-for="MaChuongTrinh" class="clay-input w-full" /><span asp-validation-for="MaChuongTrinh" class="text-red-600"></span></div>
+        <div><label asp-for="TenChuongTrinh"></label><input asp-for="TenChuongTrinh" class="clay-input w-full" /><span asp-validation-for="TenChuongTrinh" class="text-red-600"></span></div>
+        <div><label asp-for="TrinhDo"></label><input asp-for="TrinhDo" class="clay-input w-full" /><span asp-validation-for="TrinhDo" class="text-red-600"></span></div>
+        <div><label asp-for="DonViQuanLy"></label><input asp-for="DonViQuanLy" class="clay-input w-full" /></div>
+        <label><input asp-for="DangTuyenSinh" /> Đang tuyển sinh</label>
+        <button class="clay-btn clay-btn-primary" type="submit">Lưu chương trình</button>
+        <a asp-action="Index" class="clay-btn clay-btn-secondary">Hủy</a>
+    </form>
+</div>

@@ -1,0 +1,17 @@
+@model Secure_Academic_Management.ViewModels.LienKetNghiepVuViewModel
+@{ ViewData["Title"] = "Thêm liên kết nghiệp vụ"; }
+<div class="max-w-2xl mx-auto clay-card p-8">
+    <h1 class="text-2xl font-black mb-2">Thêm liên kết nghiệp vụ</h1>
+    <p class="text-sm text-[#635F69] mb-6">Chỉ lưu mã tham chiếu và hệ thống nguồn; dữ liệu chi tiết thuộc hệ thống chuyên trách.</p>
+    <form asp-action="CreateReference" method="post" class="space-y-4">
+        <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
+        <div><label asp-for="MaSinhVien"></label><select asp-for="MaSinhVien" asp-items="ViewBag.Students" class="clay-input w-full"><option value="">-- Chọn sinh viên --</option></select><span asp-validation-for="MaSinhVien" class="text-red-600"></span></div>
+        <div><label asp-for="LoaiLienKet"></label><select asp-for="LoaiLienKet" class="clay-input w-full"><option>Tài chính</option><option>Hỗ trợ</option><option>Tốt nghiệp</option></select></div>
+        <div><label asp-for="MaThamChieu"></label><input asp-for="MaThamChieu" class="clay-input w-full" /><span asp-validation-for="MaThamChieu" class="text-red-600"></span></div>
+        <div><label asp-for="HeThongNguon"></label><input asp-for="HeThongNguon" class="clay-input w-full" placeholder="Ví dụ: FinanceService" /><span asp-validation-for="HeThongNguon" class="text-red-600"></span></div>
+        <div><label asp-for="PhanLoai"></label><input asp-for="PhanLoai" class="clay-input w-full" /></div>
+        <div><label asp-for="MoTa"></label><textarea asp-for="MoTa" class="clay-input w-full"></textarea></div>
+        <button class="clay-btn clay-btn-primary" type="submit">Lưu liên kết</button>
+        <a asp-action="Index" class="clay-btn clay-btn-secondary">Hủy</a>
+    </form>
+</div>

@@ -1,0 +1,18 @@
+@model Secure_Academic_Management.ViewModels.GradeViewModel
+@{
+    ViewData["Title"] = "Nhập điểm";
+}
+<div class="clay-card max-w-2xl mx-auto p-6">
+    <h1 class="text-2xl font-black mb-5">Nhập kết quả học tập</h1>
+    <form asp-action="AddGrade" method="post" class="space-y-4">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
+        <input asp-for="MaSinhVien" type="hidden" />
+        <label class="block">Học phần<select asp-for="MaHocPhan" asp-items="ViewBag.Courses" class="clay-input w-full mt-1"><option value="">-- Chọn học phần --</option></select></label>
+        <span asp-validation-for="MaHocPhan" class="text-red-600"></span>
+        <label class="block">Điểm số<input asp-for="DiemSo" class="clay-input w-full mt-1" type="number" min="0" max="10" step="0.01" /></label>
+        <span asp-validation-for="DiemSo" class="text-red-600"></span>
+        <div class="flex gap-3"><button class="clay-btn clay-btn-primary" type="submit">Lưu</button><a asp-action="Grades" asp-route-studentId="@Model.MaSinhVien" class="clay-btn clay-btn-secondary">Hủy</a></div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

@@ -26,37 +26,42 @@
 
             <div class="space-y-5">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                    <!-- Họ và tên -->
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Họ và tên</label>
-                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default">
+                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default flex items-center px-4 py-3 text-base text-[#332F3A] font-medium min-h-[48px]">
                             @Model.HoTen
                         </div>
                     </div>
 
+                    <!-- Email -->
                     <div>
                         <label class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Email</label>
-                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default">
+                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default flex items-center px-4 py-3 text-base text-[#332F3A] font-medium min-h-[48px]">
                             @Model.Email
                         </div>
                     </div>
 
+                    <!-- Số điện thoại -->
                     <div>
                         <label class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Số điện thoại</label>
-                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default">
+                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default flex items-center px-4 py-3 text-base text-[#332F3A] font-medium min-h-[48px]">
                             @(string.IsNullOrEmpty(Model.SoDienThoai) ? "Chưa cập nhật" : Model.SoDienThoai)
                         </div>
                     </div>
 
+                    <!-- Ngày sinh -->
                     <div class="md:col-span-2">
                         <label class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Ngày sinh</label>
-                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default">
+                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default flex items-center px-4 py-3 text-base text-[#332F3A] font-medium min-h-[48px]">
                             @Model.NgaySinh.ToString("dd/MM/yyyy")
                         </div>
                     </div>
 
+                    <!-- Tuổi -->
                     <div>
                         <label class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Tuổi</label>
-                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default font-bold text-[#7C3AED]">
+                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default flex items-center px-4 py-3 text-base font-bold text-[#7C3AED] min-h-[48px]">
                             @{
                                 var age = DateTime.Now.Year - Model.NgaySinh.Year;
                                 if (Model.NgaySinh.Date > DateTime.Now.AddYears(-age)) age--;
@@ -65,9 +70,10 @@
                         </div>
                     </div>
 
+                    <!-- Ngày cập nhật -->
                     <div>
                         <label class="block text-sm font-bold text-[#635F69] mb-2 ml-1">Ngày cập nhật</label>
-                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default text-sm">
+                        <div class="clay-input w-full bg-[#F4F1FA] cursor-default flex items-center px-4 py-3 text-base text-[#332F3A] font-medium min-h-[48px]">
                             @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
                         </div>
                     </div>
@@ -76,6 +82,9 @@
 
             <!-- Action Buttons -->
             <div class="mt-8 flex gap-4">
+                <a asp-controller="Academic" asp-action="Grades" asp-route-studentId="@Model.MaSinhVien" class="clay-btn clay-btn-secondary flex-1 text-center">
+                    Kết quả học tập
+                </a>
                 <a asp-action="Edit" asp-route-id="@Model.MaSinhVien" class="clay-btn clay-btn-primary flex-1 active-press">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
                     Chỉnh sửa
@@ -89,7 +98,26 @@
 
         <!-- Cột phải: Trạng thái & Cập nhật -->
         <div class="space-y-6">
-            <!-- Card Trạng thái -->
+        <div class="clay-card p-6">
+            <h2 class="text-lg font-black mb-4">Quá trình theo học</h2>
+            <p class="text-sm text-[#635F69] mb-3">Trạng thái hồ sơ: <strong>@Model.TrangThaiHoSo</strong></p>
+            @if (Model.LanTheoHocs.Count == 0)
+            {
+                <p class="text-sm text-[#635F69]">Chưa có lần theo học.</p>
+            }
+            else
+            {
+                foreach (var enrollment in Model.LanTheoHocs.OrderByDescending(item => item.LaChuongTrinhChinh).ThenByDescending(item => item.NgayBatDau))
+                {
+                    <div class="border-b border-[#E5E1EE] py-2 text-sm">
+                        <strong>@enrollment.MaChuongTrinh</strong> - @enrollment.ChuongTrinh.TenChuongTrinh<br />
+                        Khóa @enrollment.KhoaNhapHoc · @enrollment.TrangThai · từ @enrollment.NgayBatDau.ToString("dd/MM/yyyy")
+                    </div>
+                }
+            }
+            <p class="text-xs text-[#635F69] mt-3">Tài chính: @Model.LienKetTaiChinhs.Count liên kết · Hỗ trợ: @Model.LienKetHoTros.Count · Tốt nghiệp: @Model.HoSoTotNghieps.Count</p>
+        </div>
+        <!-- Card Trạng thái -->
             <div class="clay-card p-6 border-l-4 border-l-[#10B981]">
                 <h2 class="text-lg font-black font-['Nunito'] text-[#332F3A] mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-[#10B981]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -126,7 +154,7 @@
                                 @foreach (var history in attachedFiles)
                                 {
                                     <div class="border-b border-amber-200 last:border-0 pb-3 last:pb-0">
-                                        <a href="@history.DuongDanFile" target="_blank" rel="noopener noreferrer"
+                                        <a asp-action="DownloadAttachment" asp-route-id="@history.Id" target="_blank" rel="noopener noreferrer"
                                            class="text-sm font-bold text-amber-900 hover:underline break-words">
                                             @(history.TenFileGoc ?? "Mở tệp đính kèm")
                                         </a>

@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Secure_Academic_Management.Models
 {
@@ -9,6 +10,8 @@ namespace Secure_Academic_Management.Models
 
         [Required, MaxLength(20)]
         public string MaSinhVien { get; set; } = string.Empty;
+
+        [ForeignKey(nameof(MaSinhVien))]
         public virtual SinhVien SinhVien { get; set; } = null!;
 
         [Required, MaxLength(50)]
@@ -28,6 +31,7 @@ namespace Secure_Academic_Management.Models
         public string? TenFileGoc { get; set; }
 
         public DateTime NgayThayDoi { get; set; } = DateTime.UtcNow;
+        public DateTime NgayHieuLuc { get; set; } = DateTime.UtcNow;
 
         [MaxLength(450)]
         public string? NguoiThucHienId { get; set; }

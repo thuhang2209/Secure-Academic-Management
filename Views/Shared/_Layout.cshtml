@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@{
+    var displayName = User.FindFirst("FullName")?.Value
+        ?? User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value
+        ?? User.Identity?.Name
+        ?? "Người dùng";
+}
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
@@ -84,36 +90,26 @@
                     </svg>
                 </div>
                 <h1 class="text-2xl font-black font-['Nunito'] bg-gradient-to-r from-[#332F3A] to-[#7C3AED] bg-clip-text text-transparent group-hover:opacity-80 transition-opacity">
-                    Learning Management System
+                    Academic Management
                 </h1>
             </a>
         
             <!-- Logout Button (chỉ hiện khi đã đăng nhập) -->
-           @if (User.Identity.IsAuthenticated)
-            {
-                <div class="flex items-center gap-3">
-                    <!-- User Name Badge -->
-                    <div class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-clay-md bg-gradient-to-r from-[#A78BFA]/10 to-[#7C3AED]/10 border border-[#7C3AED]/20">
+           @if (User.Identity?.IsAuthenticated == true)
+           {
+               <div class="flex items-center gap-3">
+                   <!-- User Name Badge -->
+                    <a asp-controller="Account" asp-action="Profile" class="flex items-center gap-2 px-4 py-2 rounded-clay-md bg-gradient-to-r from-[#A78BFA]/10 to-[#7C3AED]/10 border border-[#7C3AED]/20 hover-lift">
                         <div class="w-8 h-8 rounded-full bg-gradient-to-br from-[#34D399] to-[#10B981] flex items-center justify-center shadow-clay-button">
                             <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                         </div>
                         <span class="font-['Nunito'] font-bold text-[#332F3A] text-sm">
-                            @if (User.FindFirst("FullName")?.Value != null)
-                            {
-                                @User.FindFirst("FullName").Value
-                            }
-                            else if (User.FindFirst(System.Security.Claims.ClaimTypes.Name)?.Value != null)
-                            {
-                                @User.FindFirst(System.Security.Claims.ClaimTypes.Name).Value
-                            }
-                            else
-                            {
-                                @User.Identity.Name
-                            }
+                            @displayName
                         </span>
-                    </div>
+                    </a>
+                    <a asp-controller="Account" asp-action="ChangePassword" class="clay-nav-link hidden sm:inline-flex">Đổi mật khẩu</a>
 
                     <!-- Form Logout với Anti-Forgery Token -->
                     <form asp-controller="Account" asp-action="Logout" method="post" style="display: inline;">
@@ -143,6 +139,27 @@
 
     <!-- Main Content -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-12">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="clay-alert clay-alert-success" role="status">
+                <span aria-hidden="true">✓</span>
+                <span>@TempData["SuccessMessage"]</span>
+            </div>
+        }
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="clay-alert clay-alert-danger" role="alert">
+                <span aria-hidden="true">!</span>
+                <span>@TempData["ErrorMessage"]</span>
+            </div>
+        }
+        @if (TempData["InfoMessage"] != null)
+        {
+            <div class="clay-alert clay-alert-info" role="status">
+                <span aria-hidden="true">i</span>
+                <span>@TempData["InfoMessage"]</span>
+            </div>
+        }
         @RenderBody()
     </main>
 

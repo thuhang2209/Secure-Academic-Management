@@ -1,0 +1,19 @@
+@model Secure_Academic_Management.ViewModels.CourseViewModel
+@{
+    ViewData["Title"] = "Thêm học phần";
+}
+<div class="clay-card max-w-2xl mx-auto p-6">
+    <h1 class="text-2xl font-black mb-5">Thêm học phần</h1>
+    <form asp-action="CreateCourse" method="post" class="space-y-4">
+        @Html.AntiForgeryToken()
+        <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
+        <label class="block">Mã học phần<input asp-for="MaHocPhan" class="clay-input w-full mt-1" /></label>
+        <span asp-validation-for="MaHocPhan" class="text-red-600"></span>
+        <label class="block">Tên học phần<input asp-for="TenHocPhan" class="clay-input w-full mt-1" /></label>
+        <span asp-validation-for="TenHocPhan" class="text-red-600"></span>
+        <label class="block">Số tín chỉ<input asp-for="SoTinChi" class="clay-input w-full mt-1" type="number" min="1" max="10" /></label>
+        <span asp-validation-for="SoTinChi" class="text-red-600"></span>
+        <div class="flex gap-3"><button class="clay-btn clay-btn-primary" type="submit">Lưu</button><a asp-action="Courses" class="clay-btn clay-btn-secondary">Hủy</a></div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }

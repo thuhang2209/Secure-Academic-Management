@@ -17,7 +17,7 @@ namespace Secure_Academic_Management.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.13")
+                .HasAnnotation("ProductVersion", "10.0.14")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -224,6 +224,99 @@ namespace Secure_Academic_Management.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Secure_Academic_Management.Models.AuditLog", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("Action")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<long>("DurationMilliseconds")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("EntityId")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EntityType")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("HttpMethod")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<string>("IpAddress")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("OccurredAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("StatusCode")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserAgent")
+                        .HasMaxLength(512)
+                        .HasColumnType("nvarchar(512)");
+
+                    b.Property<string>("UserId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OccurredAtUtc");
+
+                    b.HasIndex("UserId", "Action");
+
+                    b.ToTable("AuditLogs");
+                });
+
+            modelBuilder.Entity("Secure_Academic_Management.Models.ChuongTrinhDaoTao", b =>
+                {
+                    b.Property<string>("MaChuongTrinh")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<bool>("DangTuyenSinh")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("DonViQuanLy")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("TenChuongTrinh")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("TrinhDo")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("MaChuongTrinh");
+
+                    b.ToTable("ChuongTrinhDaoTaos");
+                });
+
             modelBuilder.Entity("Secure_Academic_Management.Models.Diem", b =>
                 {
                     b.Property<int>("Id")
@@ -241,7 +334,7 @@ namespace Secure_Academic_Management.Migrations
 
                     b.Property<string>("MaSinhVien")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<DateTime>("NgayCapNhat")
                         .HasColumnType("datetime2");
@@ -256,6 +349,51 @@ namespace Secure_Academic_Management.Migrations
                     b.HasIndex("MaSinhVien");
 
                     b.ToTable("Diems");
+                });
+
+            modelBuilder.Entity("Secure_Academic_Management.Models.HoSoTotNghiep", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("HeThongNguon")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MaSinhVien")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("MaThamChieu")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("NgayLienKetUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayTotNghiep")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaSinhVien");
+
+                    b.ToTable("HoSoTotNghieps", (string)null);
                 });
 
             modelBuilder.Entity("Secure_Academic_Management.Models.HocPhan", b =>
@@ -274,6 +412,55 @@ namespace Secure_Academic_Management.Migrations
                     b.HasKey("MaHocPhan");
 
                     b.ToTable("HocPhans");
+                });
+
+            modelBuilder.Entity("Secure_Academic_Management.Models.LanTheoHoc", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("GhiChu")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("KhoaNhapHoc")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("LaChuongTrinhChinh")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("MaChuongTrinh")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("MaSinhVien")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("NgayBatDau")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("NgayKetThuc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("TrangThai")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaChuongTrinh");
+
+                    b.HasIndex("MaSinhVien", "MaChuongTrinh", "NgayBatDau")
+                        .IsUnique();
+
+                    b.ToTable("LanTheoHocs");
                 });
 
             modelBuilder.Entity("Secure_Academic_Management.Models.LichSuTrangThai", b =>
@@ -297,6 +484,9 @@ namespace Secure_Academic_Management.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<DateTime>("NgayHieuLuc")
+                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("NgayThayDoi")
                         .HasColumnType("datetime2");
@@ -326,10 +516,95 @@ namespace Secure_Academic_Management.Migrations
                     b.ToTable("LichSuTrangThais");
                 });
 
+            modelBuilder.Entity("Secure_Academic_Management.Models.LienKetHoTro", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("HeThongNguon")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LoaiHoTro")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MaSinhVien")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("MaThamChieu")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("NgayLienKetUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaSinhVien");
+
+                    b.ToTable("LienKetHoTros", (string)null);
+                });
+
+            modelBuilder.Entity("Secure_Academic_Management.Models.LienKetTaiChinh", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("HeThongNguon")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LoaiNghiaVu")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("MaSinhVien")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("MaThamChieu")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MoTa")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("NgayLienKetUtc")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MaSinhVien");
+
+                    b.ToTable("LienKetTaiChinhs", (string)null);
+                });
+
             modelBuilder.Entity("Secure_Academic_Management.Models.SinhVien", b =>
                 {
                     b.Property<string>("MaSinhVien")
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -344,8 +619,18 @@ namespace Secure_Academic_Management.Migrations
                     b.Property<string>("IdentityUserId")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("NgayKiemTraHoSoUtc")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("NgayTiepNhanUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("NguoiTiepNhanId")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("SoDienThoai")
                         .HasMaxLength(15)
@@ -354,6 +639,11 @@ namespace Secure_Academic_Management.Migrations
                     b.Property<string>("TrangThai")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("TrangThaiHoSo")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("MaSinhVien");
 
@@ -435,12 +725,64 @@ namespace Secure_Academic_Management.Migrations
                     b.Navigation("SinhVien");
                 });
 
+            modelBuilder.Entity("Secure_Academic_Management.Models.HoSoTotNghiep", b =>
+                {
+                    b.HasOne("Secure_Academic_Management.Models.SinhVien", "SinhVien")
+                        .WithMany("HoSoTotNghieps")
+                        .HasForeignKey("MaSinhVien")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SinhVien");
+                });
+
+            modelBuilder.Entity("Secure_Academic_Management.Models.LanTheoHoc", b =>
+                {
+                    b.HasOne("Secure_Academic_Management.Models.ChuongTrinhDaoTao", "ChuongTrinh")
+                        .WithMany("LanTheoHocs")
+                        .HasForeignKey("MaChuongTrinh")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Secure_Academic_Management.Models.SinhVien", "SinhVien")
+                        .WithMany("LanTheoHocs")
+                        .HasForeignKey("MaSinhVien")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ChuongTrinh");
+
+                    b.Navigation("SinhVien");
+                });
+
             modelBuilder.Entity("Secure_Academic_Management.Models.LichSuTrangThai", b =>
                 {
                     b.HasOne("Secure_Academic_Management.Models.SinhVien", "SinhVien")
-                        .WithMany()
+                        .WithMany("LichSuTrangThais")
                         .HasForeignKey("MaSinhVien")
                         .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("SinhVien");
+                });
+
+            modelBuilder.Entity("Secure_Academic_Management.Models.LienKetHoTro", b =>
+                {
+                    b.HasOne("Secure_Academic_Management.Models.SinhVien", "SinhVien")
+                        .WithMany("LienKetHoTros")
+                        .HasForeignKey("MaSinhVien")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SinhVien");
+                });
+
+            modelBuilder.Entity("Secure_Academic_Management.Models.LienKetTaiChinh", b =>
+                {
+                    b.HasOne("Secure_Academic_Management.Models.SinhVien", "SinhVien")
+                        .WithMany("LienKetTaiChinhs")
+                        .HasForeignKey("MaSinhVien")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("SinhVien");
@@ -455,9 +797,24 @@ namespace Secure_Academic_Management.Migrations
                     b.Navigation("IdentityUser");
                 });
 
+            modelBuilder.Entity("Secure_Academic_Management.Models.ChuongTrinhDaoTao", b =>
+                {
+                    b.Navigation("LanTheoHocs");
+                });
+
             modelBuilder.Entity("Secure_Academic_Management.Models.SinhVien", b =>
                 {
                     b.Navigation("Diems");
+
+                    b.Navigation("HoSoTotNghieps");
+
+                    b.Navigation("LanTheoHocs");
+
+                    b.Navigation("LichSuTrangThais");
+
+                    b.Navigation("LienKetHoTros");
+
+                    b.Navigation("LienKetTaiChinhs");
                 });
 #pragma warning restore 612, 618
         }

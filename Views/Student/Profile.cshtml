@@ -1,0 +1,85 @@
+﻿@model Secure_Academic_Management.Models.SinhVien
+
+@{
+    ViewData["Title"] = "Hồ sơ sinh viên";
+}
+
+<div class="max-w-4xl mx-auto space-y-6 text-center">
+    <div class="text-center py-8">
+        <h1 class="text-4xl font-black font-['Nunito'] text-[#332F3A]">Hồ sơ cá nhân</h1>
+        <p class="text-lg text-[#635F69] mt-2">Mã sinh viên: <span class="text-[#7C3AED] font-bold">@Model.MaSinhVien</span></p>
+    </div>
+
+    <div class="clay-card p-8">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+                <label class="block text-base font-bold text-[#635F69] mb-2">Họ và tên</label>
+                <div class="clay-input w-full flex items-center justify-center text-center bg-[#F4F1FA] text-lg font-bold">@Model.HoTen</div>
+            </div>
+            
+            <div>
+                <label class="block text-base font-bold text-[#635F69] mb-2">Email</label>
+                <div class="clay-input w-full flex items-center justify-center text-center bg-[#F4F1FA] text-lg font-bold">@Model.Email</div>
+            </div>
+            
+            <div>
+                <label class="block text-base font-bold text-[#635F69] mb-2">Số điện thoại</label>
+                <div class="clay-input w-full flex items-center justify-center text-center bg-[#F4F1FA] text-lg font-bold">
+                    @(string.IsNullOrEmpty(Model.SoDienThoai) ? "Chưa cập nhật" : Model.SoDienThoai)
+                </div>
+            </div>
+            
+            <div>
+                <label class="block text-base font-bold text-[#635F69] mb-2">Ngày sinh</label>
+                <div class="clay-input w-full flex items-center justify-center text-center bg-[#F4F1FA] text-lg font-bold">@Model.NgaySinh.ToString("dd/MM/yyyy")</div>
+            </div>
+            
+            <div class="md:col-span-2">
+                <label class="block text-base font-bold text-[#635F69] mb-2">Trạng thái</label>
+                <div class="clay-input w-full flex items-center justify-center text-center bg-[#F4F1FA] text-lg font-bold">
+                    <span class="px-3 py-1 rounded-full text-sm font-bold 
+                        @(Model.TrangThai == "Đang học" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700")">
+                        @Model.TrangThai
+                    </span>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <a asp-controller="Account" asp-action="Profile" class="clay-btn clay-btn-primary">Cập nhật thông tin</a>
+            </div>
+        </div>
+
+        <div class="clay-card p-8 text-left">
+            <h2 class="text-2xl font-black text-center mb-5">Các lần theo học</h2>
+            @if (Model.LanTheoHocs.Count == 0)
+            {
+                <p class="text-center text-[#635F69]">Chưa ghi nhận chương trình đào tạo.</p>
+            }
+            else
+            {
+                <div class="space-y-3">
+                    @foreach (var enrollment in Model.LanTheoHocs.OrderByDescending(item => item.LaChuongTrinhChinh).ThenByDescending(item => item.NgayBatDau))
+                    {
+                        <div class="clay-input flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                            <span class="font-bold">@enrollment.MaChuongTrinh - @enrollment.ChuongTrinh.TenChuongTrinh</span>
+                            <span>Khóa @enrollment.KhoaNhapHoc · @enrollment.TrangThai · từ @enrollment.NgayBatDau.ToString("dd/MM/yyyy")</span>
+                        </div>
+                    }
+                </div>
+            }
+            <p class="text-xs text-[#635F69] mt-5 text-center">
+                Điểm chính thức được quản lý bởi module Đào tạo; hồ sơ sinh viên chỉ hiển thị kết quả và liên kết tham chiếu.
+            </p>
+        </div>
+
+        <div class="clay-card p-8 text-left">
+            <h2 class="text-2xl font-black text-center mb-5">Liên kết nghiệp vụ</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-center">
+                <div class="clay-input"><strong>Tài chính</strong><br />@Model.LienKetTaiChinhs.Count liên kết</div>
+                <div class="clay-input"><strong>Hỗ trợ</strong><br />@Model.LienKetHoTros.Count liên kết</div>
+                <div class="clay-input"><strong>Tốt nghiệp</strong><br />@Model.HoSoTotNghieps.Count hồ sơ</div>
+            </div>
+            <p class="text-xs text-[#635F69] mt-4 text-center">Chỉ lưu mã tham chiếu và hệ thống nguồn, không sao chép dữ liệu nghiệp vụ.</p>
+        </div>
+    </div>
+</div>

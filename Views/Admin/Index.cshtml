@@ -1,0 +1,56 @@
+@model IReadOnlyCollection<Secure_Academic_Management.ViewModels.StaffListItemViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý nhân viên";
+}
+
+<div class="space-y-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-4xl font-black font-['Nunito'] text-[#332F3A]">Quản lý nhân viên</h1>
+            <p class="text-[#635F69] mt-2">Tạo, cập nhật, khóa hoặc xóa tài khoản nhân viên đào tạo.</p>
+        </div>
+        <a asp-action="CreateStaff" class="clay-btn clay-btn-primary active-press">+ Thêm nhân viên</a>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="clay-card p-4 border-l-4 border-l-[#10B981] text-[#047857]">@TempData["SuccessMessage"]</div>
+    }
+
+    <div class="clay-card p-6 overflow-x-auto">
+        <table class="w-full text-left">
+            <thead>
+                <tr class="border-b border-[#E5E1EE] text-sm text-[#635F69]">
+                    <th class="p-3">Họ tên</th>
+                    <th class="p-3">Email</th>
+                    <th class="p-3">Trạng thái</th>
+                    <th class="p-3 text-right">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+            @foreach (var staff in Model)
+            {
+                <tr class="border-b border-[#F0EDF5]">
+                    <td class="p-3 font-bold">@staff.FullName</td>
+                    <td class="p-3">@staff.Email</td>
+                    <td class="p-3">@(staff.IsLocked ? "Đã khóa" : "Đang hoạt động")</td>
+                    <td class="p-3">
+                        <div class="flex justify-end gap-2">
+                            <a asp-action="EditStaff" asp-route-id="@staff.Id" class="clay-btn clay-btn-secondary text-sm px-4 py-2">Sửa</a>
+                            <form asp-action="DeleteStaff" asp-route-id="@staff.Id" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa tài khoản này?');">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="clay-btn text-sm px-4 py-2 bg-[#FEE2E2] text-[#B91C1C]">Xóa</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            @if (Model.Count == 0)
+            {
+                <tr><td colspan="4" class="p-8 text-center text-[#635F69]">Chưa có nhân viên nào.</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

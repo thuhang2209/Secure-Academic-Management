@@ -1,0 +1,17 @@
+@model Secure_Academic_Management.ViewModels.LanTheoHocViewModel
+@{ ViewData["Title"] = "Ghi nhận lần theo học"; }
+<div class="max-w-2xl mx-auto clay-card p-8">
+    <h1 class="text-2xl font-black mb-6">Ghi nhận lần theo học</h1>
+    <form asp-action="CreateEnrollment" method="post" class="space-y-4">
+        <div asp-validation-summary="ModelOnly" class="text-red-600"></div>
+        <div><label asp-for="MaSinhVien"></label><select asp-for="MaSinhVien" asp-items="ViewBag.Students" class="clay-input w-full"><option value="">-- Chọn sinh viên --</option></select><span asp-validation-for="MaSinhVien" class="text-red-600"></span></div>
+        <div><label asp-for="MaChuongTrinh"></label><select asp-for="MaChuongTrinh" asp-items="ViewBag.Programs" class="clay-input w-full"><option value="">-- Chọn chương trình --</option></select><span asp-validation-for="MaChuongTrinh" class="text-red-600"></span></div>
+        <div><label asp-for="KhoaNhapHoc"></label><input asp-for="KhoaNhapHoc" class="clay-input w-full" /></div>
+        <div><label asp-for="NgayBatDau"></label><input asp-for="NgayBatDau" class="clay-input w-full" type="date" /></div>
+        <div><label asp-for="TrangThai"></label><select asp-for="TrangThai" class="clay-input w-full">@foreach (var status in new[] {"Đang học", "Bảo lưu", "Tạm ngừng học", "Đã tốt nghiệp", "Đã thôi học"}) { <option value="@status">@status</option> }</select></div>
+        <label><input asp-for="LaChuongTrinhChinh" /> Là chương trình chính</label>
+        <div><label asp-for="GhiChu"></label><textarea asp-for="GhiChu" class="clay-input w-full"></textarea></div>
+        <button class="clay-btn clay-btn-primary" type="submit">Lưu lần theo học</button>
+        <a asp-action="Index" class="clay-btn clay-btn-secondary">Hủy</a>
+    </form>
+</div>

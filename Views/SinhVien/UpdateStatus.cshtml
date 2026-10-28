@@ -34,7 +34,7 @@
                     <option value="">-- Chọn trạng thái mới --</option>
                     <option value="Đang học">Đang học</option>
                     <option value="Bảo lưu">Bảo lưu</option>
-                    <option value="Tạm ngừng">Tạm ngừng học</option>
+                    <option value="Tạm ngừng học">Tạm ngừng học</option>
                     <option value="Đã tốt nghiệp">Đã tốt nghiệp</option>
                     <option value="Đã thôi học">Đã thôi học</option>
                 </select>
@@ -50,6 +50,12 @@
                 </label>
                 <textarea asp-for="LyDo" rows="4" class="clay-input w-full resize-none" placeholder="Ví dụ: Đơn xin bảo lưu số 123/KH-2024 ngày 20/10/2024..."></textarea>
                 <span asp-validation-for="LyDo" class="text-red-500 text-sm mt-1 block ml-1"></span>
+            </div>
+
+            <div>
+                <label asp-for="NgayHieuLuc" class="block text-sm font-bold font-['Nunito'] text-[#635F69] mb-2 ml-1"></label>
+                <input asp-for="NgayHieuLuc" type="date" class="clay-input w-full" />
+                <span asp-validation-for="NgayHieuLuc" class="text-red-500 text-sm mt-1 block ml-1"></span>
             </div>
 
             <!-- Upload File -->
@@ -93,7 +99,7 @@
                     Xác nhận thay đổi
                 </button>
 
-                <a asp-action="Edit" asp-route-id="@Model.MaSinhVien" class="clay-btn clay-btn-secondary w-full text-lg active-press block text-center">
+                <a asp-action="Details" asp-route-id="@Model.MaSinhVien" class="clay-btn clay-btn-secondary w-full text-lg active-press block text-center">
                     Hủy bỏ
                 </a>
             </div>

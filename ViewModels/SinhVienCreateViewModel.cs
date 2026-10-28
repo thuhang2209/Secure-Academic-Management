@@ -25,6 +25,7 @@ namespace Secure_Academic_Management.ViewModels
         [Required(ErrorMessage = "Ngày sinh là bắt buộc")]
         [Display(Name = "Ngày sinh")]
         [DataType(DataType.Date)]
+        [CustomValidation(typeof(SinhVienCreateViewModel), nameof(ValidateAge))]
         public DateTime NgaySinh { get; set; }
 
         // Method validation tuổi (tối thiểu 17 tuổi)

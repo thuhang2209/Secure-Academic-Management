@@ -1,0 +1,18 @@
+@model Secure_Academic_Management.ViewModels.StaffCreateViewModel
+
+@{
+    ViewData["Title"] = "Thêm nhân viên";
+}
+
+<div class="max-w-2xl mx-auto clay-card p-8">
+    <h1 class="text-3xl font-black font-['Nunito'] mb-6">Thêm nhân viên</h1>
+    <div asp-validation-summary="ModelOnly" class="text-[#B91C1C] mb-4"></div>
+    <form asp-action="CreateStaff" method="post" class="space-y-5">
+        @Html.AntiForgeryToken()
+        <div><label asp-for="FullName" class="block font-bold mb-2"></label><input asp-for="FullName" class="clay-input w-full" /><span asp-validation-for="FullName" class="text-[#B91C1C]"></span></div>
+        <div><label asp-for="Email" class="block font-bold mb-2"></label><input asp-for="Email" class="clay-input w-full" /><span asp-validation-for="Email" class="text-[#B91C1C]"></span></div>
+        <div><label asp-for="Password" class="block font-bold mb-2"></label><input asp-for="Password" class="clay-input w-full" /><span asp-validation-for="Password" class="text-[#B91C1C]"></span></div>
+        <div class="flex gap-3"><button type="submit" class="clay-btn clay-btn-primary">Tạo tài khoản</button><a asp-action="Index" class="clay-btn clay-btn-secondary">Hủy</a></div>
+    </form>
+</div>
+@section Scripts { <partial name="_ValidationScriptsPartial" /> }
